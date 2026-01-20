@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.claude/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Output files
+output/
+*.pdf
+
+# Test files
+test-*.txt
+test-*.pdf
+
+# Logs
+*.log
+
+# Config with API keys (users create their own)
+# Note: The template config is NOT ignored, only the user's local config
+.esv-slides/
+
+# Temporary files
+*.tmp
+*.bak
