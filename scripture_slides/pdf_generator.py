@@ -116,7 +116,7 @@ class PDFGenerator:
         self.c.drawString(ref_x, ref_y, reference)
 
         # Draw footer
-        self._draw_footer("ESV")
+        self._draw_footer("ESV® Bible © 2001 Crossway")
 
         # New page
         self.c.showPage()
@@ -448,7 +448,7 @@ class PDFGenerator:
                 y -= line_height
 
         # Draw footer
-        self._draw_footer(f"{reference} | ESV")
+        self._draw_footer(f"{reference} | ESV® Bible © 2001 Crossway")
 
         # New page
         self.c.showPage()
