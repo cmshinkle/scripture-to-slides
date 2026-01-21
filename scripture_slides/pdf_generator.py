@@ -170,7 +170,7 @@ class PDFGenerator:
         stripped = line.strip()
         # Check if line starts with leading spaces (poetry/indentation)
         has_leading_spaces = line and line[0] == ' '
-        return stripped and not re.search(r'\[\d+\]', stripped) and not has_leading_spaces
+        return bool(stripped and not re.search(r'\[\d+\]', stripped) and not has_leading_spaces)
 
     def _is_poetry(self, text):
         """Check if text contains poetry formatting (indented lines).

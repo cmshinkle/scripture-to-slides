@@ -45,13 +45,16 @@ output/
 # Test files
 test-*.txt
 test-*.pdf
+.pytest_cache/
+.coverage
+htmlcov/
 
 # Logs
 *.log
 
 # Config with API keys (users create their own)
 # Note: The template config is NOT ignored, only the user's local config
-.esv-slides/
+.scripture-slides/
 
 # Temporary files
 *.tmp
