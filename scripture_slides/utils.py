@@ -1,4 +1,4 @@
-"""Utility functions for esv-slides."""
+"""Utility functions for scripture-to-slides."""
 
 import logging
 import os
@@ -7,7 +7,7 @@ from pathlib import Path
 
 def get_config_dir():
     """Get the config directory path."""
-    return Path.home() / ".esv-slides"
+    return Path.home() / ".scripture-slides"
 
 
 def get_config_file():
@@ -17,7 +17,7 @@ def get_config_file():
 
 def get_log_file():
     """Get the log file path."""
-    return get_config_dir() / "esv-slides.log"
+    return get_config_dir() / "scripture-slides.log"
 
 
 def setup_logging():
@@ -26,7 +26,7 @@ def setup_logging():
     log_file.parent.mkdir(parents=True, exist_ok=True)
 
     # Create logger
-    logger = logging.getLogger("esv_slides")
+    logger = logging.getLogger("scripture_slides")
     logger.setLevel(logging.DEBUG)
 
     # File handler - detailed logging

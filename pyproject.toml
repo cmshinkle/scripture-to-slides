@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_backend"
 
 [project]
-name = "esv-slides"
+name = "scripture-to-slides"
 version = "0.1.0"
-description = "CLI tool to fetch ESV scripture and generate presentation-ready PDFs"
+description = "CLI tool to fetch scripture and generate presentation-ready PDFs"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
@@ -25,4 +25,4 @@ dev = [
 ]
 
 [project.scripts]
-esv-slides = "esv_slides.cli:main"
+scripture-to-slides = "scripture_slides.cli:main"

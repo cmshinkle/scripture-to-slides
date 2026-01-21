@@ -1,4 +1,4 @@
-"""Configuration management for esv-slides."""
+"""Configuration management for scripture-to-slides."""
 
 import sys
 from pathlib import Path
@@ -27,7 +27,7 @@ combine_passages: true
 
 
 class Config:
-    """Configuration holder for esv-slides."""
+    """Configuration holder for scripture-to-slides."""
 
     def __init__(self, data):
         self.api_key = data.get("api_key", "")

@@ -1,4 +1,4 @@
-"""Command-line interface for esv-slides."""
+"""Command-line interface for scripture-to-slides."""
 
 import sys
 import os
@@ -20,15 +20,15 @@ def parse_args():
         argparse.Namespace: Parsed arguments
     """
     parser = argparse.ArgumentParser(
-        description="Generate presentation-ready PDF slides from ESV scripture passages",
+        description="Generate presentation-ready PDF slides from scripture passages",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  esv-slides "John 3:16-21"
-  esv-slides "John 3:16-21" "Romans 8:28-30"
-  esv-slides --input-file references.txt
-  esv-slides "Psalm 23" --output-file my-slides.pdf
-  esv-slides "Romans 8" --font-size 72 --separate
+  scripture-to-slides "John 3:16-21"
+  scripture-to-slides "John 3:16-21" "Romans 8:28-30"
+  scripture-to-slides --input-file references.txt
+  scripture-to-slides "Psalm 23" --output-file my-slides.pdf
+  scripture-to-slides "Romans 8" --font-size 72 --separate
         """
     )
 
@@ -92,7 +92,7 @@ Examples:
     parser.add_argument(
         "-v", "--version",
         action="version",
-        version=f"esv-slides {__version__}"
+        version=f"scripture-to-slides {__version__}"
     )
 
     args = parser.parse_args()
@@ -101,7 +101,7 @@ Examples:
     if not args.references and not args.file:
         parser.print_help()
         print("\nError: No scripture reference provided.", file=sys.stderr)
-        print('Usage: esv-slides "John 3:16-21"', file=sys.stderr)
+        print('Usage: scripture-to-slides "John 3:16-21"', file=sys.stderr)
         sys.exit(1)
 
     return args
