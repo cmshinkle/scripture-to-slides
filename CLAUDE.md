@@ -106,11 +106,18 @@ MARGIN_BOTTOM = 120
 
 **Color scheme**: Black background (#000000), white text (#FFFFFF), white superscript verse numbers.
 
-### ESV API Integration
+### Bible API Integration
 
-API endpoint: `https://api.esv.org/v3/passage/text/`
+**Configurable endpoint**: The API endpoint is configurable via `api_endpoint` in `~/.scripture-slides/config.yaml`. This allows support for different Bible translation APIs in the future.
 
-Key parameters:
+Default endpoint: `https://api.esv.org/v3/passage/text/` (ESV API)
+
+The `ESVAPIClient` class (esv_api.py) accepts an `api_endpoint` parameter:
+```python
+client = ESVAPIClient(api_key, api_endpoint=custom_url, include_headings=True)
+```
+
+Key API parameters:
 - `include-verse-numbers: True` - Verse numbers in `[1]` format
 - `include-headings: True/False` - Section headings (e.g., "The Sermon on the Mount")
 - `indent-poetry: True` - Poetry indentation with 2 spaces per level

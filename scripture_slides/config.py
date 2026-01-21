@@ -8,8 +8,9 @@ from .utils import get_config_dir, get_config_file, setup_logging
 
 logger = setup_logging()
 
-DEFAULT_CONFIG = """# ESV API credentials
-api_key: "your-esv-api-key-here"
+DEFAULT_CONFIG = """# Bible API settings
+api_endpoint: "https://api.esv.org/v3/passage/text/"  # API endpoint URL
+api_key: "your-esv-api-key-here"  # ESV API key from https://api.esv.org
 
 # Output settings
 output_directory: "./output"  # Output directory for PDFs
@@ -30,6 +31,7 @@ class Config:
     """Configuration holder for scripture-to-slides."""
 
     def __init__(self, data):
+        self.api_endpoint = data.get("api_endpoint", "https://api.esv.org/v3/passage/text/")
         self.api_key = data.get("api_key", "")
         self.output_directory = data.get("output_directory", "./output")
         self.output_type = data.get("output_type", "pdf")

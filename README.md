@@ -172,8 +172,9 @@ python -m scripture_slides.cli "Psalm 23" --font-size 80 --output-file large-psa
 Settings can be configured in `~/.scripture-slides/config.yaml`:
 
 ```yaml
-# ESV API credentials
-api_key: "your-esv-api-key-here"
+# Bible API settings
+api_endpoint: "https://api.esv.org/v3/passage/text/"  # API endpoint URL
+api_key: "your-esv-api-key-here"  # ESV API key from https://api.esv.org
 
 # Output settings
 output_directory: "./output"

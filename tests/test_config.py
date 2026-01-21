@@ -12,6 +12,7 @@ from scripture_slides.config import Config, create_default_config, load_config, 
 def test_config_initialization_with_defaults():
     """Test Config class initialization with empty data."""
     config = Config({})
+    assert config.api_endpoint == "https://api.esv.org/v3/passage/text/"
     assert config.api_key == ""
     assert config.output_directory == "./output"
     assert config.output_type == "pdf"
@@ -25,6 +26,7 @@ def test_config_initialization_with_defaults():
 def test_config_initialization_with_values():
     """Test Config class initialization with provided values."""
     data = {
+        "api_endpoint": "https://custom-api.example.com/v1/text/",
         "api_key": "test-key-123",
         "output_directory": "/custom/output",
         "output_type": "pdf",
@@ -35,6 +37,7 @@ def test_config_initialization_with_values():
         "combine_passages": False,
     }
     config = Config(data)
+    assert config.api_endpoint == "https://custom-api.example.com/v1/text/"
     assert config.api_key == "test-key-123"
     assert config.output_directory == "/custom/output"
     assert config.font == "Times-Roman"

@@ -4,7 +4,7 @@ import pytest
 import responses
 from requests.exceptions import ConnectionError, Timeout, RequestException
 
-from scripture_slides.esv_api import ESVAPIClient, API_ENDPOINT
+from scripture_slides.esv_api import ESVAPIClient, DEFAULT_API_ENDPOINT
 
 
 @pytest.fixture
@@ -19,7 +19,7 @@ def test_fetch_passage_success(api_client):
     # Mock successful API response
     responses.add(
         responses.GET,
-        API_ENDPOINT,
+        DEFAULT_API_ENDPOINT,
         json={
             "passages": ["[1] For God so loved the world..."],
             "passage_meta": [{"canonical": "John 3:16"}],
@@ -39,7 +39,7 @@ def test_fetch_passage_uses_correct_headers(api_client):
     """Test that fetch_passage sends correct authorization header."""
     responses.add(
         responses.GET,
-        API_ENDPOINT,
+        DEFAULT_API_ENDPOINT,
         json={
             "passages": ["Test passage"],
             "passage_meta": [{"canonical": "John 3:16"}],
@@ -59,7 +59,7 @@ def test_fetch_passage_uses_correct_parameters(api_client):
     """Test that fetch_passage sends correct query parameters."""
     responses.add(
         responses.GET,
-        API_ENDPOINT,
+        DEFAULT_API_ENDPOINT,
         json={
             "passages": ["Test passage"],
             "passage_meta": [{"canonical": "John 3:16"}],
@@ -84,7 +84,7 @@ def test_fetch_passage_without_headings():
 
     responses.add(
         responses.GET,
-        API_ENDPOINT,
+        DEFAULT_API_ENDPOINT,
         json={
             "passages": ["Test passage"],
             "passage_meta": [{"canonical": "John 3:16"}],
@@ -103,7 +103,7 @@ def test_fetch_passage_401_unauthorized(api_client):
     """Test handling of 401 Unauthorized error (invalid API key)."""
     responses.add(
         responses.GET,
-        API_ENDPOINT,
+        DEFAULT_API_ENDPOINT,
         json={"error": "Unauthorized"},
         status=401,
     )
@@ -119,7 +119,7 @@ def test_fetch_passage_429_rate_limit(api_client):
     """Test handling of 429 Too Many Requests error (rate limit)."""
     responses.add(
         responses.GET,
-        API_ENDPOINT,
+        DEFAULT_API_ENDPOINT,
         json={"error": "Rate limit exceeded"},
         status=429,
     )
@@ -135,7 +135,7 @@ def test_fetch_passage_500_server_error(api_client):
     """Test handling of 500 server error."""
     responses.add(
         responses.GET,
-        API_ENDPOINT,
+        DEFAULT_API_ENDPOINT,
         json={"error": "Internal server error"},
         status=500,
     )
@@ -151,7 +151,7 @@ def test_fetch_passage_empty_response(api_client):
     """Test handling of empty passages in API response."""
     responses.add(
         responses.GET,
-        API_ENDPOINT,
+        DEFAULT_API_ENDPOINT,
         json={
             "passages": [""],
             "passage_meta": [{"canonical": "Invalid Reference"}],
@@ -170,7 +170,7 @@ def test_fetch_passage_no_passages_key(api_client):
     """Test handling of response without passages key."""
     responses.add(
         responses.GET,
-        API_ENDPOINT,
+        DEFAULT_API_ENDPOINT,
         json={"error": "Something went wrong"},
         status=200,
     )
@@ -186,7 +186,7 @@ def test_fetch_passage_connection_error(api_client):
     """Test handling of connection errors."""
     responses.add(
         responses.GET,
-        API_ENDPOINT,
+        DEFAULT_API_ENDPOINT,
         body=ConnectionError("Connection failed"),
     )
 
@@ -201,7 +201,7 @@ def test_fetch_passage_timeout(api_client):
     """Test handling of request timeout."""
     responses.add(
         responses.GET,
-        API_ENDPOINT,
+        DEFAULT_API_ENDPOINT,
         body=Timeout("Request timed out"),
     )
 
@@ -216,7 +216,7 @@ def test_fetch_passage_uses_canonical_reference(api_client):
     """Test that fetch_passage uses canonical reference from API."""
     responses.add(
         responses.GET,
-        API_ENDPOINT,
+        DEFAULT_API_ENDPOINT,
         json={
             "passages": ["Test passage"],
             "passage_meta": [{"canonical": "John 3:16–21"}],  # Note en-dash
@@ -235,7 +235,7 @@ def test_fetch_passage_falls_back_to_input_reference(api_client):
     """Test that fetch_passage uses input reference when canonical not available."""
     responses.add(
         responses.GET,
-        API_ENDPOINT,
+        DEFAULT_API_ENDPOINT,
         json={
             "passages": ["Test passage"],
             "passage_meta": [],  # No canonical reference
@@ -247,3 +247,33 @@ def test_fetch_passage_falls_back_to_input_reference(api_client):
 
     # Should fall back to input reference
     assert result["reference"] == "John 3:16"
+
+
+@responses.activate
+def test_custom_api_endpoint():
+    """Test that custom API endpoint is used when provided."""
+    custom_endpoint = "https://custom-bible-api.example.com/v1/text/"
+    client = ESVAPIClient(api_key="test-key", api_endpoint=custom_endpoint)
+
+    responses.add(
+        responses.GET,
+        custom_endpoint,
+        json={
+            "passages": ["Custom API passage"],
+            "passage_meta": [{"canonical": "John 3:16"}],
+        },
+        status=200,
+    )
+
+    result = client.fetch_passage("John 3:16")
+
+    # Verify it used the custom endpoint
+    assert result["text"] == "Custom API passage"
+    assert len(responses.calls) == 1
+    assert responses.calls[0].request.url.startswith(custom_endpoint)
+
+
+def test_api_endpoint_defaults_to_esv():
+    """Test that API endpoint defaults to ESV when not provided."""
+    client = ESVAPIClient(api_key="test-key")
+    assert client.api_endpoint == DEFAULT_API_ENDPOINT

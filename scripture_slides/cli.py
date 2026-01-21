@@ -167,7 +167,7 @@ def main():
     auto_open = args.open if args.open else config.auto_open
 
     # Create API client
-    client = ESVAPIClient(config.api_key, include_headings=include_headings)
+    client = ESVAPIClient(config.api_key, api_endpoint=config.api_endpoint, include_headings=include_headings)
 
     # Fetch all passages
     print(f"Fetching {len(references)} passage(s)...")

@@ -6,20 +6,23 @@ from .utils import setup_logging
 
 logger = setup_logging()
 
-API_ENDPOINT = "https://api.esv.org/v3/passage/text/"
+# Default API endpoint (can be overridden in config)
+DEFAULT_API_ENDPOINT = "https://api.esv.org/v3/passage/text/"
 
 
 class ESVAPIClient:
-    """Client for interacting with the ESV API."""
+    """Client for interacting with Bible APIs (primarily ESV)."""
 
-    def __init__(self, api_key, include_headings=True):
-        """Initialize the ESV API client.
+    def __init__(self, api_key, api_endpoint=None, include_headings=True):
+        """Initialize the API client.
 
         Args:
-            api_key: ESV API authorization token
+            api_key: API authorization token
+            api_endpoint: API endpoint URL (defaults to ESV API)
             include_headings: Whether to include section headings
         """
         self.api_key = api_key
+        self.api_endpoint = api_endpoint or DEFAULT_API_ENDPOINT
         self.include_headings = include_headings
 
     def fetch_passage(self, reference):
@@ -59,7 +62,7 @@ class ESVAPIClient:
         }
 
         try:
-            response = requests.get(API_ENDPOINT, headers=headers, params=params, timeout=10)
+            response = requests.get(self.api_endpoint, headers=headers, params=params, timeout=10)
             logger.debug(f"API response status: {response.status_code}")
 
             # Handle specific error codes
