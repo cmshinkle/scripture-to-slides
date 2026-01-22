@@ -15,7 +15,34 @@ Currently supports ESV (English Standard Version) via the ESV.org API.
 - **Flexible Output** - Generate combined or separate PDFs
 - **Highly Configurable** - Customize fonts, sizes, and output settings
 
-## Installation
+## Quick Start (No Installation Required)
+
+**For non-technical users:** Download the standalone executable for your operating system from the [Releases page](https://github.com/cmshinkle/scripture-to-slides/releases). No Python installation needed!
+
+1. Download the appropriate file for your system:
+   - **macOS**: `scripture-to-slides-macos`
+   - **Windows**: `scripture-to-slides-windows.exe`
+   - **Linux**: `scripture-to-slides-linux`
+
+2. Get your free ESV API key from https://api.esv.org
+
+3. On first run, the tool will create a config file at:
+   - macOS/Linux: `~/.scripture-slides/config.yaml`
+   - Windows: `C:\Users\YourName\.scripture-slides\config.yaml`
+
+4. Edit the config file and add your API key
+
+5. Run the executable:
+   ```bash
+   # macOS/Linux (may need to make it executable first)
+   chmod +x scripture-to-slides-macos
+   ./scripture-to-slides-macos "John 3:16"
+
+   # Windows (double-click or run from Command Prompt)
+   scripture-to-slides-windows.exe "John 3:16"
+   ```
+
+## Installation for Developers
 
 ### Prerequisites
 - Python 3.8 or higher

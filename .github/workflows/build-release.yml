@@ -1,0 +1,109 @@
+name: Build Release Executables
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build executable
+        run: |
+          pyinstaller --onefile --name scripture-to-slides scripture_slides/cli.py
+
+      - name: Upload macOS executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: scripture-to-slides-macos
+          path: dist/scripture-to-slides
+
+      - name: Upload to Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/scripture-to-slides
+          name: scripture-to-slides-macos
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build executable
+        run: |
+          pyinstaller --onefile --name scripture-to-slides scripture_slides/cli.py
+
+      - name: Upload Windows executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: scripture-to-slides-windows
+          path: dist/scripture-to-slides.exe
+
+      - name: Upload to Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/scripture-to-slides.exe
+          name: scripture-to-slides-windows.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build executable
+        run: |
+          pyinstaller --onefile --name scripture-to-slides scripture_slides/cli.py
+
+      - name: Upload Linux executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: scripture-to-slides-linux
+          path: dist/scripture-to-slides
+
+      - name: Upload to Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/scripture-to-slides
+          name: scripture-to-slides-linux
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
