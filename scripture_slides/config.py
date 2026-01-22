@@ -13,8 +13,8 @@ api_endpoint: "https://api.esv.org/v3/passage/text/"  # API endpoint URL
 api_key: "your-esv-api-key-here"  # ESV API key from https://api.esv.org
 
 # Output settings
-output_directory: "./output"  # Output directory for PDFs
-output_type: "pdf"            # Future option: "google-slides"
+output_directory: "."  # Output directory for PDFs (current directory)
+output_type: "pdf"     # Future option: "google-slides"
 
 # PDF appearance
 font: "Helvetica"      # Built-in font (can also use "Times-Roman", "Courier")
@@ -33,7 +33,7 @@ class Config:
     def __init__(self, data):
         self.api_endpoint = data.get("api_endpoint", "https://api.esv.org/v3/passage/text/")
         self.api_key = data.get("api_key", "")
-        self.output_directory = data.get("output_directory", "./output")
+        self.output_directory = data.get("output_directory", ".")
         self.output_type = data.get("output_type", "pdf")
         self.font = data.get("font", "Helvetica")
         self.font_size = data.get("font_size", 64)

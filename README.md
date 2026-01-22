@@ -82,7 +82,7 @@ Currently supports ESV (English Standard Version) via the ESV.org API.
    ```bash
    python -m scripture_slides.cli "John 3:16-21"
    ```
-   Your PDF will be saved to `./output/`
+   Your PDF will be saved to the current directory
 
 ## Usage Examples
 
@@ -168,7 +168,7 @@ python -m scripture_slides.cli "Psalm 23" --font-size 80 --output-file large-psa
 | Flag | Description |
 |------|-------------|
 | `-o, --output-file FILE` | Custom output filename (default: `scripture_YYYY-MM-DD_HHMM.pdf`) |
-| `-d, --output-dir DIR` | Output directory (default: `./output/`) |
+| `-d, --output-dir DIR` | Output directory (default: current directory) |
 | `-s, --separate` | Generate separate PDFs for each passage |
 | `--open` | Auto-open PDF(s) after generation |
 
@@ -202,7 +202,7 @@ api_endpoint: "https://api.esv.org/v3/passage/text/"  # API endpoint URL
 api_key: "your-esv-api-key-here"  # ESV API key from https://api.esv.org
 
 # Output settings
-output_directory: "./output"
+output_directory: "."
 output_type: "pdf"
 
 # PDF appearance
