@@ -15,60 +15,53 @@ Currently supports ESV (English Standard Version) via the ESV.org API.
 - **Flexible Output** - Generate combined or separate PDFs
 - **Highly Configurable** - Customize fonts, sizes, and output settings
 
-## Quick Start (macOS - No Installation Required)
+## Installation
 
-**For non-technical users:** Download the standalone executable from the [Releases page](https://github.com/cmshinkle/scripture-to-slides/releases). No Python installation needed!
+### Homebrew (Recommended for macOS)
 
-1. Download `scripture-to-slides` from the latest release
+```bash
+# Add the tap
+brew tap cmshinkle/scripture-to-slides
 
-2. Get your free ESV API key from https://api.esv.org
+# Install the tool
+brew install scripture-to-slides
+```
 
-3. On first run, the tool will create a config file at `~/.scripture-slides/config.yaml`
+### Install from Source (For Developers)
 
-4. Edit the config file and add your API key
-
-5. Run the executable:
-   ```bash
-   # Make it executable (first time only)
-   chmod +x scripture-to-slides
-
-   # Run it
-   ./scripture-to-slides "John 3:16"
-
-   # Or move it to your PATH for global access
-   sudo mv scripture-to-slides /usr/local/bin/
-   scripture-to-slides "John 3:16"
-   ```
-
-## Installation for Developers
-
-### Prerequisites
+#### Prerequisites
 - Python 3.8 or higher
 - ESV API key (free at https://api.esv.org)
 
-### Install from Source
+#### Steps
 
-1. Create a virtual environment:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/cmshinkle/scripture-to-slides.git
+   cd scripture-to-slides
+   ```
+
+2. Create a virtual environment:
    ```bash
    python3 -m venv venv
    source venv/bin/activate  # On macOS/Linux
    ```
 
-2. Install dependencies:
+3. Install dependencies:
    ```bash
    pip install requests reportlab pyyaml
    ```
 
-3. Run the tool:
+4. Run the tool:
    ```bash
-   python -m scripture_slides.cli "John 3:16"
+   scripture-to-slides "John 3:16"
    ```
 
 ## Quick Start
 
 1. **First run** - Generate config file:
    ```bash
-   python -m scripture_slides.cli "John 3:16"
+   scripture-to-slides "John 3:16"
    ```
    This creates `~/.scripture-slides/config.yaml`
 
@@ -80,9 +73,11 @@ Currently supports ESV (English Standard Version) via the ESV.org API.
 
 3. **Generate slides**:
    ```bash
-   python -m scripture_slides.cli "John 3:16-21"
+   scripture-to-slides "John 3:16-21"
    ```
    Your PDF will be saved to the current directory
+
+**Note:** If you installed from source, use `scripture-to-slides` instead of `scripture-to-slides`
 
 ## Usage Examples
 
@@ -90,19 +85,19 @@ Currently supports ESV (English Standard Version) via the ESV.org API.
 
 ```bash
 # Single verse
-python -m scripture_slides.cli "John 3:16"
+scripture-to-slides "John 3:16"
 
 # Verse range
-python -m scripture_slides.cli "John 3:16-21"
+scripture-to-slides "John 3:16-21"
 
 # Whole chapter
-python -m scripture_slides.cli "Psalm 23"
+scripture-to-slides "Psalm 23"
 
 # Multiple passages (combined into one PDF)
-python -m scripture_slides.cli "John 3:16-21" "Romans 8:28-30"
+scripture-to-slides "John 3:16-21" "Romans 8:28-30"
 
 # Comma-separated references
-python -m scripture_slides.cli "John 3:16, Romans 8:28, Psalm 23"
+scripture-to-slides "John 3:16, Romans 8:28, Psalm 23"
 ```
 
 ### File Input
@@ -119,39 +114,39 @@ Matthew 5:1-12
 
 Then generate slides:
 ```bash
-python -m scripture_slides.cli --input-file references.txt
+scripture-to-slides --input-file references.txt
 ```
 
 ### Custom Output
 
 ```bash
 # Custom filename
-python -m scripture_slides.cli "Psalm 23" --output-file sunday-sermon.pdf
+scripture-to-slides "Psalm 23" --output-file sunday-sermon.pdf
 
 # Custom output directory
-python -m scripture_slides.cli "John 3:16" --output-dir ~/Documents/Slides
+scripture-to-slides "John 3:16" --output-dir ~/Documents/Slides
 
 # Separate PDFs for each passage
-python -m scripture_slides.cli "John 3:16" "Romans 8:28" --separate
+scripture-to-slides "John 3:16" "Romans 8:28" --separate
 
 # Auto-open PDF after generation
-python -m scripture_slides.cli "Psalm 23" --open
+scripture-to-slides "Psalm 23" --open
 ```
 
 ### Customization
 
 ```bash
 # Different font
-python -m scripture_slides.cli "John 3:16" --font Times-Roman
+scripture-to-slides "John 3:16" --font Times-Roman
 
 # Custom font size (default: 64pt)
-python -m scripture_slides.cli "John 3:16" --font-size 72
+scripture-to-slides "John 3:16" --font-size 72
 
 # No section headings
-python -m scripture_slides.cli "Matthew 5:1-12" --no-headings
+scripture-to-slides "Matthew 5:1-12" --no-headings
 
 # Combine multiple options
-python -m scripture_slides.cli "Psalm 23" --font-size 80 --output-file large-psalm.pdf --open
+scripture-to-slides "Psalm 23" --font-size 80 --output-file large-psalm.pdf --open
 ```
 
 ## Command-Line Options
@@ -267,22 +262,22 @@ The API key is free for personal and church use.
 
 ### Youth Group
 ```bash
-python -m scripture_slides.cli "John 3:16-21" "Romans 5:8" --font-size 72 --open
+scripture-to-slides "John 3:16-21" "Romans 5:8" --font-size 72 --open
 ```
 
 ### Bible Study Series
 ```bash
-python -m scripture_slides.cli --input-file romans-study.txt --separate --output-dir ~/RomansSeries
+scripture-to-slides --input-file romans-study.txt --separate --output-dir ~/RomansSeries
 ```
 
 ### Sunday Sermon
 ```bash
-python -m scripture_slides.cli "Matthew 5:1-20" --output-file sermon-beatitudes.pdf --font-size 64 --open
+scripture-to-slides "Matthew 5:1-20" --output-file sermon-beatitudes.pdf --font-size 64 --open
 ```
 
 ### Worship Service Readings
 ```bash
-python -m scripture_slides.cli "Psalm 23" "John 10:11-18" --output-file good-shepherd-readings.pdf
+scripture-to-slides "Psalm 23" "John 10:11-18" --output-file good-shepherd-readings.pdf
 ```
 
 ## License

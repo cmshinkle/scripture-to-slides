@@ -46,8 +46,8 @@ Claude will automatically:
 3. ✅ Create and push a git tag (e.g., `v0.3.0`)
 4. ✅ Create a GitHub release with release notes
 5. ✅ Calculate the SHA256 hash of the release tarball
-6. ✅ Update the Homebrew formula with new version and hash
-7. ✅ Commit and push the formula update
+6. ✅ Update the Homebrew formula with new version and hash in the tap repository
+7. ✅ Commit and push the formula update to the tap
 
 ## After Release
 
@@ -118,31 +118,23 @@ Then just say: **"Create a release"**
 ### Main Repository
 **Location**: `cmshinkle/scripture-to-slides`
 - Contains the Python source code
-- Users download standalone executables from Releases page
-- Git tags trigger GitHub Actions to build executables
+- Git tags trigger releases when you create them
 
 ### Homebrew Tap Repository
 **Location**: `cmshinkle/homebrew-scripture-to-slides`
 - Contains the Homebrew formula (`scripture-to-slides.rb`)
-- Automatically updated by Claude when you create a release
+- Automatically updated when you create a release
 - Users install via `brew tap cmshinkle/scripture-to-slides`
 
-## Distribution Methods
+## Distribution
 
-Your tool is distributed in two ways:
-
-### 1. Homebrew (Recommended for macOS users)
+### Homebrew Installation
 ```bash
 brew tap cmshinkle/scripture-to-slides
 brew install scripture-to-slides
 ```
 
 **Updates**: Users run `brew update && brew upgrade scripture-to-slides`
-
-### 2. Standalone Executable
-- Users download from GitHub Releases page
-- No Python installation required
-- Automatically built by GitHub Actions when you create a release
 
 ## Troubleshooting
 
@@ -154,12 +146,10 @@ Make sure both version strings are updated:
 ### "Homebrew users aren't getting updates"
 Check that:
 1. Git tag was created and pushed
-2. Homebrew formula points to the correct tag
-3. SHA256 hash matches the release tarball
-4. Users ran `brew update` before `brew upgrade`
-
-### "GitHub Action didn't build executable"
-Check the Actions tab on GitHub. The workflow runs when you create a release.
+2. GitHub release was created
+3. Homebrew formula points to the correct tag
+4. SHA256 hash matches the release tarball
+5. Users ran `brew update` before `brew upgrade`
 
 ## Additional Resources
 

@@ -1,6 +1,10 @@
 # How to Create a Release
 
-This guide walks through creating a new release of scripture-to-slides on GitHub.
+This guide walks through manually creating a new release of scripture-to-slides on GitHub.
+
+**Recommended approach:** Just ask Claude Code to "Create a release" - it will handle all steps automatically.
+
+**This document:** Manual process if you need to do it yourself.
 
 ## Before You Release
 
@@ -17,12 +21,14 @@ This guide walks through creating a new release of scripture-to-slides on GitHub
    scripture-to-slides "John 3:16" --output-file test.pdf
    ```
 
-3. **Update version number** (optional but recommended)
+3. **Update version numbers** (required)
    - Edit `pyproject.toml` and update the version number
-   - Example: `version = "0.1.0"` → `version = "0.2.0"`
+     - Example: `version = "0.1.0"` → `version = "0.2.0"`
+   - Edit `scripture_slides/__init__.py` and update `__version__`
+     - Example: `__version__ = "0.1.0"` → `__version__ = "0.2.0"`
    - Commit and push:
      ```bash
-     git add pyproject.toml
+     git add pyproject.toml scripture_slides/__init__.py
      git commit -m "Bump version to 0.2.0"
      git push origin main
      ```
@@ -84,29 +90,52 @@ git push origin v0.1.0
 
 5. **Click "Publish release"**
 
-### Step 3: Wait for the Build
+### Step 3: Update the Homebrew Formula
 
 Once you publish the release:
 
-1. **GitHub Action automatically starts** (takes 5-10 minutes)
-   - Go to the "Actions" tab to watch progress
-   - Look for "Build macOS Release" workflow
+1. **Calculate the SHA256 hash** of the release tarball:
+   ```bash
+   curl -sL https://github.com/cmshinkle/scripture-to-slides/archive/refs/tags/v0.1.0.tar.gz | shasum -a 256
+   ```
 
-2. **When complete, the executable appears** on your release page
-   - Refresh the release page
-   - You'll see `scripture-to-slides` listed under "Assets"
+2. **Update the Homebrew formula** in your tap repository:
+   - Repository: `https://github.com/cmshinkle/homebrew-scripture-to-slides`
+   - File: `scripture-to-slides.rb`
+   - Update the `url` to point to the new tag
+   - Update the `sha256` with the hash from step 1
 
-3. **Anyone can now download it!**
+3. **Test the formula locally**:
+   ```bash
+   brew uninstall scripture-to-slides  # If already installed
+   brew install --build-from-source scripture-to-slides
+   scripture-to-slides "John 3:16"
+   ```
+
+4. **Commit and push the formula update**:
+   ```bash
+   git add scripture-to-slides.rb
+   git commit -m "Update to v0.1.0"
+   git push origin main
+   ```
+
+5. **Users can now upgrade**:
+   ```bash
+   brew update
+   brew upgrade scripture-to-slides
+   ```
 
 ## Quick Release Checklist
 
 - [ ] All changes committed and pushed
 - [ ] Tests passing (`pytest`)
-- [ ] Version number updated in `pyproject.toml`
+- [ ] Version numbers updated in `pyproject.toml` and `scripture_slides/__init__.py`
 - [ ] Git tag created and pushed (`git tag v0.1.0 && git push origin v0.1.0`)
 - [ ] Release created on GitHub with descriptive notes
-- [ ] GitHub Action completed successfully
-- [ ] Executable appears in release assets
+- [ ] SHA256 hash calculated for release tarball
+- [ ] Homebrew formula updated in tap repository
+- [ ] Formula changes committed and pushed
+- [ ] Tested installation: `brew uninstall scripture-to-slides && brew install scripture-to-slides`
 
 ## Troubleshooting
 
@@ -124,24 +153,27 @@ git tag v0.1.0
 git push origin v0.1.0
 ```
 
-### GitHub Action Failed
-1. Go to Actions tab
-2. Click on the failed workflow
-3. Read the error message
-4. Common issues:
-   - Missing dependencies in `requirements.txt`
-   - Syntax errors in code
-   - PyInstaller compatibility issues
+### "brew install fails"
+Common issues:
+1. **SHA256 mismatch**: Recalculate the hash and update the formula
+   ```bash
+   curl -sL https://github.com/cmshinkle/scripture-to-slides/archive/refs/tags/vX.Y.Z.tar.gz | shasum -a 256
+   ```
+2. **URL not found**: Make sure the git tag exists and the GitHub release is published
+3. **Syntax error in formula**: Run `brew audit scripture-to-slides` to check
+4. **Missing dependencies**: Ensure Python 3.8+ is available
 
-### Executable Won't Run on macOS
-Users might see "can't be opened because it is from an unidentified developer"
-
-**Solution for users:**
+### "Users aren't getting the update"
+Users need to run:
 ```bash
-# Right-click the file → "Open" (instead of double-click)
-# Or remove quarantine:
-xattr -d com.apple.quarantine scripture-to-slides
-chmod +x scripture-to-slides
+brew update                      # Update Homebrew and tap info
+brew upgrade scripture-to-slides # Upgrade to latest version
+```
+
+If still not working, they can reinstall:
+```bash
+brew uninstall scripture-to-slides
+brew install scripture-to-slides
 ```
 
 ## Example Release Notes Template
@@ -162,24 +194,27 @@ Initial release of scripture-to-slides - a CLI tool to generate presentation-rea
 
 ## Installation
 
-**Download:** `scripture-to-slides` (macOS)
+**Homebrew (Recommended):**
+```bash
+brew tap cmshinkle/scripture-to-slides
+brew install scripture-to-slides
+```
 
 **Setup:**
-1. Download the executable
-2. Get free ESV API key: https://api.esv.org
-3. Run: `chmod +x scripture-to-slides`
-4. First run creates config at `~/.scripture-slides/config.yaml`
-5. Add your API key to the config file
+1. Get free ESV API key: https://api.esv.org
+2. First run creates config at `~/.scripture-slides/config.yaml`
+3. Add your API key to the config file
 
 **Usage:**
 ```bash
-./scripture-to-slides "John 3:16"
-./scripture-to-slides "Psalm 23" --font-size 72 --open
+scripture-to-slides "John 3:16"
+scripture-to-slides "Psalm 23" --font-size 72 --open
 ```
 
 ## Requirements
 
-- macOS 10.15 or later
+- macOS (or Linux with Homebrew)
+- Python 3.8+ (installed automatically by Homebrew)
 - ESV API key (free)
 
 ## Known Issues
